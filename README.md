@@ -72,6 +72,11 @@ The website is built from one canonical HTML shell and reusable fragments. The b
 │   ├── css/
 │   └── js/
 ├── components/
+│   ├── site-brand.html      (logo + name + tagline)
+│   ├── announce.html        (top banner)
+│   ├── docs-header.html     (docs header)
+│   ├── docs-nav.html        (docs sidebar links)
+│   ├── docs-layout.html     (docs page frame, uses a slot)
 │   └── site-footer.html
 ├── pages/
 │   ├── home/
@@ -179,6 +184,40 @@ The runtime resolves the placeholders using the route's props. Normal double bra
 ```html
 <include type="html" path="components/site-footer.html"></include>
 ```
+
+### Pass props to a component
+
+Every attribute except `type` and `path` becomes a prop for that one include. Inside the component, read it with `{{ name }}` (text is HTML-escaped; `{{{ name }}}` is raw HTML).
+
+```html
+<!-- page -->
+<include type="html" path="components/site-brand.html" href="#top" brand="P.O.W.E.R. 2.0"></include>
+
+<!-- components/site-brand.html -->
+<a class="brand" href="{{ href }}">{{ brand }}</a>
+```
+
+Names that are not include props (for example `{{ frameworkName }}`) are left alone and still come from the route's `props`. Attribute names are matched in lower case, because browsers lower-case them.
+
+### Wrap page content in a layout (slots)
+
+Put `<slot></slot>` in a component. Anything written between `<include>` and `</include>` is placed there.
+
+```html
+<!-- pages/docs/cli.html -->
+<include type="html" path="components/docs-layout.html" crumb="CLI reference">
+  <h1>CLI reference</h1>
+  <p>Only the content that is different on this page.</p>
+</include>
+
+<!-- components/docs-layout.html (shortened) -->
+<main class="article">
+  <div class="crumb">Documentation / {{ crumb }}</div>
+  <slot></slot>
+</main>
+```
+
+Components can include other components. The active link in `components/docs-nav.html` is marked automatically from the current route, so pages never write `class="active"` themselves.
 
 ### Load page-specific JavaScript
 

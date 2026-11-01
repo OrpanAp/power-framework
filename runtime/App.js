@@ -33,7 +33,8 @@ class App {
 
     document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
       const isDark = nextTheme === "dark";
-      button.textContent = isDark ? "☀ Light mode" : "☾ Dark mode";
+      /* Icon and label are separate so small screens can show the icon only. */
+      button.innerHTML = `<span aria-hidden="true">${isDark ? "☀" : "☾"}</span><span class="theme-label">${isDark ? "Light mode" : "Dark mode"}</span>`;
       button.setAttribute(
         "aria-label",
         isDark ? "Switch to light theme" : "Switch to dark theme",
@@ -205,6 +206,18 @@ class App {
     }
   }
 
+  /* Marks the sidebar link of the current page as "active" and opens its group.
+     Pages no longer hard-code class="active", so the sidebar can be one shared
+     component (components/docs-nav.html). */
+  static ApplyActiveNavigation(routeKey) {
+    document.querySelectorAll("aside a[data-meta-href]").forEach((link) => {
+      const linkKey = this.ResolveRouteKey(link.getAttribute("data-meta-href"));
+      const isActive = linkKey === routeKey;
+      link.classList.toggle("active", isActive);
+      if (isActive) link.closest("details")?.setAttribute("open", "");
+    });
+  }
+
   static ApplyThemeControl() {
     const header = document.querySelector("header");
     if (!header) return;
@@ -286,22 +299,68 @@ class App {
     return pages;
   }
 
-  static async GetHtml(path) {
+  /* Every file is downloaded once. A component used on 10 pages
+     (header, sidebar, footer...) is fetched one time, not 10 times. */
+  static HTML_CACHE = new Map();
+
+  static async GetHtml(path, props = {}) {
     path = this.NormalizeFilePath(path);
     const baseUrl = new URL(this.BASE_PATH, location.origin);
     const requestUrl = new URL(path, baseUrl).href;
 
-    const res = await fetch(requestUrl);
-    if (!res.ok)
-      throw new Error(
-        `Failed to load path: ${requestUrl} with status: ${res.status}`,
-      );
+    let html = this.HTML_CACHE.get(requestUrl);
+    if (html === undefined) {
+      const res = await fetch(requestUrl);
+      if (!res.ok)
+        throw new Error(
+          `Failed to load path: ${requestUrl} with status: ${res.status}`,
+        );
 
-    const html = await res.text();
+      html = await res.text();
+      this.HTML_CACHE.set(requestUrl, html);
+    }
+
     const div = document.createElement("div");
-    div.innerHTML = html;
+    div.innerHTML = this.ApplyIncludeProps(html, props);
 
     return div;
+  }
+
+  /* Include props: <include type="html" path="..." crumb="CLI"></include>
+     Every attribute except "type" and "path" is a prop for that one include. */
+  static GetIncludeProps(include) {
+    const props = {};
+    for (const attr of include.attributes) {
+      if (attr.name === "type" || attr.name === "path") continue;
+      /* Browsers lower-case attribute names, so we match in lower case. */
+      props[attr.name.toLowerCase()] = attr.value;
+    }
+    return props;
+  }
+
+  /* Fills {{ name }} / {{{ name }}} inside a component with the include's own
+     props. A name that is NOT an include prop is left alone, so page props
+     like {{ frameworkName }} still work later in PropsUpdater. */
+  static ApplyIncludeProps(html, props) {
+    if (!props || Object.keys(props).length === 0) return html;
+
+    const has = (key) =>
+      Object.prototype.hasOwnProperty.call(props, key.toLowerCase());
+    const escapeHtml = (value) =>
+      String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+
+    /* {{{ raw html }}} */
+    html = html.replace(/\{\{\{\s*(\w+)\s*\}\}\}/g, (match, key) =>
+      has(key) ? props[key.toLowerCase()] : match,
+    );
+    /* {{ safe text }} */
+    return html.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, key) =>
+      has(key) ? escapeHtml(props[key.toLowerCase()]) : match,
+    );
   }
 
   static async CopyChildNodesAsFragment(html) {
@@ -338,6 +397,9 @@ class App {
     if (includeNodes.length === 0) return;
 
     for (const include of includeNodes) {
+      /* A nested include may already have been loaded by the recursive call. */
+      if (!include.parentNode) continue;
+
       const type = include.getAttribute("type");
       const path = include.getAttribute("path");
 
@@ -353,7 +415,16 @@ class App {
       const normalizedPath = this.NormalizeFilePath(path);
 
       if (type === "html") {
-        const html = await this.GetHtml(normalizedPath);
+        const html = await this.GetHtml(
+          normalizedPath,
+          this.GetIncludeProps(include),
+        );
+
+        /* Slot: whatever is written between <include> and </include> goes
+           where the component has <slot></slot> (like a page layout). */
+        const slot = html.querySelector("slot");
+        if (slot) slot.replaceWith(...include.childNodes);
+
         const fragment = await this.CopyChildNodesAsFragment(html);
 
         include.replaceWith(fragment);
@@ -623,6 +694,7 @@ class App {
     root.appendChild(fragment);
 
     await this.LoadScriptForThisPage(scripts, root);
+    this.ApplyActiveNavigation(routeKey);
     this.ApplyThemeControl();
     this.ApplyResponsiveNavigation();
   }

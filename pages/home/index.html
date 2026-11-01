@@ -1,17 +1,19 @@
 <include type="css" path="assets/css/site.css"></include>
 <!-- POWER 2.0 landing page, rendered by the POWER Engine 1.0 App runtime. -->
-<div class="announce">
-  <b>THE NEXT CHAPTER IS HERE</b> &nbsp;·&nbsp; Introducing P.O.W.E.R. 2.0 — now
-  available to explore
-</div>
+<include
+  type="html"
+  path="components/announce.html"
+  label="THE NEXT CHAPTER IS HERE"
+  text="Introducing {{ frameworkName }} {{ version }} — now available to explore"
+></include>
 <header>
   <nav class="shell">
-    <a class="brand" href="#top" data-meta-href="/"
-      ><span class="mark">ϟ</span
-      ><span
-        >P.O.W.E.R. 2.0<small>PROGRESSIVELY OPTIMIZED WEB ENGINE RENDERER</small></span
-      ></a
-    >
+    <include
+      type="html"
+      path="components/site-brand.html"
+      href="#top"
+      brand="{{ frameworkName }} {{ version }}"
+    ></include>
     <div class="links" id="main-links">
       <a href="#features" data-meta-href="/">Capabilities</a
       ><a href="#quickstart" data-meta-href="/">Quick start</a

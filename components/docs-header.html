@@ -1,0 +1,16 @@
+<!--
+  Header used by every documentation page (brand + menu button).
+  Props:  navClass = "topnav" (POWER 2.0 docs) or "nav" (POWER 1.0 docs)
+          brand    = name next to the logo
+-->
+<header>
+  <div class="shell {{ navClass }}">
+    <include
+      type="html"
+      path="components/site-brand.html"
+      href="index.html"
+      brand="{{ brand }}"
+    ></include
+    ><button class="menu" id="menu" aria-expanded="false">☰ Menu</button>
+  </div>
+</header>

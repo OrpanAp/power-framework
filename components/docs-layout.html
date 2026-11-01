@@ -1,0 +1,28 @@
+<!--
+  Page frame for the POWER 2.0 documentation pages:
+  banner + header + sidebar + breadcrumb + footer.
+  Props:  crumb = last part of the breadcrumb
+  Slot:   everything written inside <include>...</include> becomes the page body.
+-->
+<include
+  type="html"
+  path="components/announce.html"
+  label="{{ frameworkName }} {{ version }} DOCUMENTATION"
+  text="Practical guides for the framework"
+></include>
+<include
+  type="html"
+  path="components/docs-header.html"
+  navClass="topnav"
+  brand="{{ frameworkName }}"
+></include>
+<div class="shell layout">
+  <aside class="side" id="sidebar">
+    <include type="html" path="components/docs-nav.html"></include>
+  </aside>
+  <main class="article">
+    <div class="crumb">Documentation / {{ crumb }}</div>
+    <slot></slot>
+  </main>
+</div>
+<include type="html" path="components/site-footer.html"></include>

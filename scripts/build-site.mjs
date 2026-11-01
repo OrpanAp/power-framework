@@ -45,6 +45,11 @@ for (const file of [
   "pages/docs/power-1/index.html",
   "pages/errors/not-found.html",
   "components/site-footer.html",
+  "components/site-brand.html",
+  "components/announce.html",
+  "components/docs-header.html",
+  "components/docs-nav.html",
+  "components/docs-layout.html",
   "assets/css/site.css",
   "assets/js/pages/home.js",
 ]) {

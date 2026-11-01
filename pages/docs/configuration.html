@@ -1,71 +1,11 @@
 <include type="css" path="assets/css/site.css"></include>
 <!-- configuration.html: page template rendered by POWER Engine App.js -->
 
-<div class="announce">
-  <b>P.O.W.E.R. 2.0 DOCUMENTATION</b> &nbsp;·&nbsp; Practical guides for the
-  framework
-</div>
-<header>
-  <div class="shell topnav">
-    <a class="brand" href="index.html" data-meta-href="/"
-      ><span class="mark">ϟ</span
-      ><span
-        >P.O.W.E.R.<small>PROGRESSIVELY OPTIMIZED WEB ENGINE RENDERER</small></span
-      ></a
-    ><button class="menu" id="menu" aria-expanded="false">☰ Menu</button>
-  </div>
-</header>
-<div class="shell layout">
-  <aside class="side" id="sidebar">
-    <a href="index.html" data-meta-href="/">⌂ Home</a>
-    <details class="nav-group" open>
-      <summary>POWER 2.0</summary>
-      <div class="sub">
-        <a href="docs.html" data-meta-href="/docs.html">Documentation</a
-        ><a href="quick-start.html" data-meta-href="/quick-start.html"
-          >Quick start</a
-        ><a href="architecture.html" data-meta-href="/architecture.html"
-          >Architecture</a
-        ><a href="routing.html" data-meta-href="/routing.html"
-          >Routing &amp; middleware</a
-        ><a href="database.html" data-meta-href="/database.html"
-          >Database &amp; models</a
-        ><a href="security.html" data-meta-href="/security.html"
-          >Security &amp; auth</a
-        ><a href="cli.html" data-meta-href="/cli.html">CLI reference</a
-        ><a
-          href="configuration.html"
-          data-meta-href="/configuration.html"
-          class="active"
-          >Configuration</a
-        ><a href="deployment.html" data-meta-href="/deployment.html"
-          >Deployment</a
-        ><a
-          class="src"
-          href="https://github.com/OrpanAp/power-2.0"
-          target="_blank"
-          rel="noreferrer"
-          >Source ↗</a
-        >
-      </div>
-    </details>
-    <details class="nav-group">
-      <summary>POWER 1.0</summary>
-      <div class="sub">
-        <a href="power-1-docs.html" data-meta-href="/power-1-docs.html"
-          >Documentation</a
-        ><a
-          class="src"
-          href="https://github.com/OrpanAp/Custom-web-templating-framework--Power-Engine--simplified"
-          target="_blank"
-          rel="noreferrer"
-          >Source ↗</a
-        >
-      </div>
-    </details>
-  </aside>
-  <main class="article">
-    <div class="crumb">Documentation / Configuration & environment</div>
+<include
+  type="html"
+  path="components/docs-layout.html"
+  crumb="Configuration &amp; environment"
+>
     <div class="pill">POWER 2.0 · NODE.JS ≥ 22.13</div>
     <h1>Configuration & environment</h1>
     <p class="intro">
@@ -159,6 +99,4 @@ node bin/power-cli.js key:generate --write</code></pre>
         >docs/ in the P.O.W.E.R. 2.0 repository ↗</a
       >
     </p>
-  </main>
-</div>
-<include type="html" path="components/site-footer.html"></include>
+</include>
