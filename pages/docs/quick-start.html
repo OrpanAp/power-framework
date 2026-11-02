@@ -42,7 +42,7 @@
     <h3>Windows PowerShell</h3>
     <pre><code>&amp; $([scriptblock]::Create((irm 'https://raw.githubusercontent.com/OrpanAp/power-framework/main/Download/install.ps1'))) -ProjectName ProjectName</code></pre>
     <h3>Windows Command Prompt (CMD)</h3>
-    <pre><code>powershell -NoProfile -ExecutionPolicy Bypass -Command "$installer = Join-Path $env:TEMP 'power-install.ps1'; try { irm 'https://raw.githubusercontent.com/OrpanAp/power-framework/main/Download/install.ps1' -OutFile $installer; & $installer -ProjectName ProjectName } finally { Remove-Item $installer -Force -ErrorAction SilentlyContinue }"</code></pre>
+    <pre><code>powershell -NoProfile -ExecutionPolicy Bypass -Command "$installer = Join-Path $env:TEMP 'power-install.ps1'; try { Invoke-WebRequest -UseBasicParsing -Uri 'https://raw.githubusercontent.com/OrpanAp/power-framework/main/Download/install.ps1' -OutFile $installer; & $installer -ProjectName ProjectName } finally { Remove-Item $installer -Force -ErrorAction SilentlyContinue }"</code></pre>
     <p>
       After installation, enter the new directory, create your environment
       file, and start the server:
