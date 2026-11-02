@@ -24,7 +24,7 @@ if [[ -e "$PROJECT_NAME" ]]; then
   exit 1
 fi
 
-for tool in curl unzip find cp mv mkdir mktemp; do
+for tool in curl unzip find cp mv mkdir mktemp rm; do
   if ! command -v "$tool" >/dev/null 2>&1; then
     echo "Error: required command '$tool' was not found. Install it and retry." >&2
     exit 1
