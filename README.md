@@ -1,4 +1,4 @@
-0<!--
+<!--
   P.O.W.E.R. Engine — project documentation
   Keep claims aligned with the current experimental runtime.
 -->
