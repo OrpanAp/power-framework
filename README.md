@@ -15,8 +15,8 @@ Build reusable pages from HTML fragments, pass route data into templates, and na
 
 <br />
 
-[🌐 Live Demo](https://orpanap.github.io/power-Framework/)
-· [📦 Source Code](https://github.com/OrpanAp/power-Framework) · [🚀 P.O.W.E.R. 2.0](https://github.com/OrpanAp/power-2.0)
+[🌐 Live Demo](https://orpanap.github.io/power-framework/)
+· [📦 Source Code](https://github.com/OrpanAp/power-framework) · [🚀 P.O.W.E.R. 2.0](https://github.com/OrpanAp/power-2.0)
 
 <br />
 
