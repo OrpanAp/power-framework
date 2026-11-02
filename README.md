@@ -112,8 +112,8 @@ The website is built from one canonical HTML shell and reusable fragments. The b
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/OrpanAp/Custom-web-templating-framework--Power-Engine--simplified.git
-cd Custom-web-templating-framework--Power-Engine--simplified
+git clone https://github.com/OrpanAp/power-framework.git
+cd power-framework
 ```
 
 ### 2. Build the website
@@ -271,7 +271,7 @@ Do not treat client-side route configuration as an authorization or access-contr
 **P.O.W.E.R. 2.0** is the separate Node.js framework documented by this website.
 
 - [P.O.W.E.R. 2.0 repository](https://github.com/OrpanAp/power-2.0)
-- [P.O.W.E.R. Engine documentation website](https://orpanap.github.io/Custom-web-templating-framework--Power-Engine--simplified/)
+- [P.O.W.E.R. Engine documentation website](https://orpanap.github.io/power-framework/)
 
 ---
 
@@ -279,6 +279,6 @@ Do not treat client-side route configuration as an authorization or access-contr
 
 **Built with JavaScript and native browser APIs.**
 
-[Live Demo](https://orpanap.github.io/Custom-web-templating-framework--Power-Engine--simplified/) · [Repository](https://github.com/OrpanAp/Custom-web-templating-framework--Power-Engine--simplified)
+[Live Demo](https://orpanap.github.io/power-framework/) · [Repository](https://github.com/OrpanAp/power-framework)
 
 </div>
