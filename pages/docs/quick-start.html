@@ -31,10 +31,29 @@
         Bash.
       </li>
     </ul>
-    <h2>02 · Download the source</h2>
+    <h2>02 · Create a project with the command installer</h2>
+    <p>
+      The installer downloads the current P.O.W.E.R. 2.0 source into a new
+      directory. Replace <code>ProjectName</code> with your preferred folder
+      name. Review the installer before running it.
+    </p>
+    <h3>Git Bash, macOS, or Linux</h3>
+    <pre><code>curl -fsSL https://raw.githubusercontent.com/OrpanAp/power-framework/main/Download/install.sh | bash -s -- ProjectName</code></pre>
+    <h3>Windows PowerShell</h3>
+    <pre><code>&amp; $([scriptblock]::Create((irm 'https://raw.githubusercontent.com/OrpanAp/power-framework/main/Download/install.ps1'))) -ProjectName ProjectName</code></pre>
+    <h3>Windows Command Prompt (CMD)</h3>
+    <pre><code>Download\\install.cmd ProjectName</code></pre>
+    <p>
+      After installation, enter the new directory, create your environment
+      file, and start the server:
+    </p>
+    <pre><code>cd ProjectName
+cp .env.example .env
+node bin/power-cli.js serve</code></pre>
+    <h2>03 · Download the source manually</h2>
     <pre><code>git clone https://github.com/OrpanAp/power-2.0.git
 cd power-2.0</code></pre>
-    <h2>03 · Create your environment file</h2>
+    <h2>04 · Create your environment file</h2>
     <p>PowerShell:</p>
     <pre><code>Copy-Item .env.example .env</code></pre>
     <p>macOS, Linux, or Git Bash:</p>
@@ -43,14 +62,14 @@ cd power-2.0</code></pre>
       The example configuration uses a local SQLite database, so you can explore
       without installing a separate database server first.
     </p>
-    <h2>04 · Start the server</h2>
+    <h2>05 · Start the server</h2>
     <pre><code>node bin/power-cli.js serve</code></pre>
     <p>
       Open <code>http://127.0.0.1:3000</code>. On first boot, the app may create
       the initial administrator account and print a generated password. Keep it
       private and change it after signing in.
     </p>
-    <h2>05 · Explore the app</h2>
+    <h2>06 · Explore the app</h2>
     <div class="table-wrap">
       <table>
         <thead>
@@ -83,7 +102,7 @@ cd power-2.0</code></pre>
         </tbody>
       </table>
     </div>
-    <h2>06 · Create a controller</h2>
+    <h2>07 · Create a controller</h2>
     <pre><code>node bin/power-cli.js make:controller Hello</code></pre>
     <p>
       Then create a view under <code>app/views/</code> and register the route in
