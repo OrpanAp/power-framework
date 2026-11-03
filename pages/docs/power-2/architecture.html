@@ -1,0 +1,103 @@
+<include type="css" path="assets/css/site.css"></include>
+<!-- architecture.html: page template rendered by POWER Engine App.js -->
+
+<include
+  type="html"
+  path="components/docs-layout.html"
+  crumb="Architecture &amp; project structure"
+>
+    <div class="pill">POWER 2.0 · NODE.JS ≥ 22.13</div>
+    <h1>Architecture & project structure</h1>
+    <p class="intro">
+      Learn where application code belongs and how a request moves through
+      P.O.W.E.R. 2.0.
+    </p>
+    <h2>Know the layers</h2>
+    <pre><code>app.js                   boot + middleware pipeline
+bin/power-cli.js         command-line interface
+config/                  environment loader + typed settings
+core/                    router, server, views, sessions, security, database
+app/controllers/          request handlers
+app/models/               data models
+app/routes/               route definitions
+app/views/                server-rendered templates
+database/migrations/      schema migrations
+docs/                     Markdown documentation
+public/                   static assets
+storage/                  local SQLite files and dev secrets
+tests/                    node:test suites</code></pre>
+    <h2>The request lifecycle</h2>
+    <ol>
+      <li>
+        <strong>Security headers</strong> apply baseline browser protections.
+      </li>
+      <li>
+        <strong>Host guard</strong> can reject unapproved hosts and enforce
+        HTTPS.
+      </li>
+      <li>
+        <strong>Static files</strong> are served with traversal protections.
+      </li>
+      <li>
+        <strong>Rate limiting and body parsing</strong> constrain requests and
+        parse JSON or URL-encoded forms.
+      </li>
+      <li>
+        <strong>Session and user loading</strong> populate request context.
+      </li>
+      <li><strong>CSRF checks</strong> protect unsafe same-origin requests.</li>
+      <li>
+        <strong>Router and error handling</strong> invoke your route and render
+        failures.
+      </li>
+    </ol>
+    <h2>MVC-style organization</h2>
+    <div class="cards">
+      <div class="doc-card">
+        <b>Model</b
+        ><span
+          >Data access and persistence; typically extends the framework Model
+          class.</span
+        >
+      </div>
+      <div class="doc-card">
+        <b>View</b
+        ><span
+          >HTML templates rendered with data and shared layouts/partials.</span
+        >
+      </div>
+      <div class="doc-card">
+        <b>Controller</b
+        ><span
+          >Request handlers that coordinate input, models, and responses.</span
+        >
+      </div>
+      <div class="doc-card">
+        <b>Routes</b
+        ><span>Connect URL paths to controller methods and middleware.</span>
+      </div>
+    </div>
+    <p>
+      The <code>core/</code> layer is intended to remain independent from your
+      app-specific code in <code>app/</code>. Start with
+      <a class="inline" data-meta-href="/docs/power-2/routing.html"
+        >routing</a
+      >
+      to see the pieces working together.
+    </p>
+    <div class="callout">
+      <strong>Project status:</strong> P.O.W.E.R. 2.0 is under active
+      development. Verify integrations and follow the security and deployment
+      guidance before production use.
+    </div>
+    <p>
+      Source documentation:
+      <a
+        class="inline"
+        href="https://github.com/OrpanAp/power-2.0/tree/main/docs"
+        target="_blank"
+        rel="noreferrer"
+        >docs/ in the P.O.W.E.R. 2.0 repository ↗</a
+      >
+    </p>
+</include>

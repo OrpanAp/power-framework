@@ -35,9 +35,10 @@ jobs:
           test -f _site/index.html
           test -f _site/main.js
           test -f _site/runtime/App.js
-          test -f _site/docs.html
-          test -f _site/power-1-docs.html
+          test -f _site/docs/power-2/index.html
+          test -f _site/docs/power-1/index.html
           test -f _site/pages/home/index.html
+          test -f _site/pages/docs/power-2/index.html
           test -f _site/pages/docs/power-1/index.html
           test -f _site/assets/css/site.css
           test -f _site/components/site-footer.html

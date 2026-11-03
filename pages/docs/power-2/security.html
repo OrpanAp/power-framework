@@ -1,0 +1,73 @@
+<include type="css" path="assets/css/site.css"></include>
+<!-- security.html: page template rendered by POWER Engine App.js -->
+
+<include
+  type="html"
+  path="components/docs-layout.html"
+  crumb="Security &amp; authentication"
+>
+    <div class="pill">POWER 2.0 · NODE.JS ≥ 22.13</div>
+    <h1>Security & authentication</h1>
+    <p class="intro">
+      Understand server-side sessions, password hashing, role checks, CSRF
+      protections, login throttling, and optional two-factor authentication.
+    </p>
+    <h2>Sessions</h2>
+    <p>
+      Session data is stored server-side in the database; the browser receives a
+      random session identifier cookie. The identifier is regenerated on login
+      and sensitive account changes.
+    </p>
+    <pre><code>req.session.get('key', defaultValue);
+req.session.set('key', value);
+req.session.forget('key');
+req.session.flash('success', 'Saved!');
+req.session.regenerate();
+req.session.destroy();</code></pre>
+    <h2>Protect routes</h2>
+    <pre><code>app.get('/dashboard', auth.requireAuth, HomeController.dashboard);
+app.get('/login', auth.requireGuest, AuthController.showLogin);
+app.group('/admin', [auth.requireRole('admin')], (r) => {
+  r.get('/', AdminController.dashboard);
+});</code></pre>
+    <h2>Password and account protection</h2>
+    <ul>
+      <li>Password hashes use Node.js scrypt with a random salt.</li>
+      <li>Sessions support idle and absolute expiry.</li>
+      <li>CSRF tokens and Origin checks protect unsafe requests.</li>
+      <li>
+        Security headers and request-size limits provide additional guardrails.
+      </li>
+      <li>Login throttling and account lockout slow repeated guessing.</li>
+      <li>
+        Optional TOTP two-factor authentication includes single-use backup
+        codes.
+      </li>
+    </ul>
+    <h2>Enable administrator 2FA</h2>
+    <p>
+      Review <code>REQUIRE_ADMIN_2FA</code> in your environment configuration.
+      Users manage their authenticator from the account security area. Treat
+      backup codes and session secrets as sensitive credentials.
+    </p>
+    <div class="callout">
+      These are security building blocks, not a guarantee that your application
+      is secure. Review the source, keep Node.js updated, protect secrets,
+      configure HTTPS, and test the deployment against your threat model.
+    </div>
+    <div class="callout">
+      <strong>Project status:</strong> P.O.W.E.R. 2.0 is under active
+      development. Verify integrations and follow the security and deployment
+      guidance before production use.
+    </div>
+    <p>
+      Source documentation:
+      <a
+        class="inline"
+        href="https://github.com/OrpanAp/power-2.0/tree/main/docs"
+        target="_blank"
+        rel="noreferrer"
+        >docs/ in the P.O.W.E.R. 2.0 repository ↗</a
+      >
+    </p>
+</include>

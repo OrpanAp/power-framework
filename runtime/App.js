@@ -206,6 +206,25 @@ class App {
     }
   }
 
+  /* <a data-meta-href="/docs/power-2/cli.html"> needs no href: the runtime
+     writes the real one (with the correct base folder). A "#hash" already
+     written in href is kept, so href="#features" still jumps to a section. */
+  static ApplyRouteLinks() {
+    document.querySelectorAll("a[data-meta-href]").forEach((link) => {
+      const key = link.getAttribute("data-meta-href");
+      if (!key) return;
+
+      const current = link.getAttribute("href") || "";
+      const hashIndex = current.indexOf("#");
+      const hash = hashIndex >= 0 ? current.slice(hashIndex) : "";
+
+      link.setAttribute(
+        "href",
+        this.BuildLocationPath(this.ResolveRouteKey(key)) + hash,
+      );
+    });
+  }
+
   /* Marks the sidebar link of the current page as "active" and opens its group.
      Pages no longer hard-code class="active", so the sidebar can be one shared
      component (components/docs-nav.html). */
@@ -274,13 +293,23 @@ class App {
     for (const key in routes) {
       const route = routes[key];
       if (!route.href) throw new Error(`Error: Undefined route href`);
-      if (!route.path) throw new Error(`Error: Undefined route path`);
       if (typeof route.href !== "string")
         throw new Error(`Type Error: Required route.href type of: "string"`);
+
+      const href = this.NormalizeRoute(route.href);
+
+      /* Old URL that now lives somewhere else: { href: "/old", redirect: "/new/" } */
+      if (route.redirect) {
+        if (typeof route.redirect !== "string")
+          throw new Error(`Type Error: Required route.redirect type of: "string"`);
+        pages.set(href, { redirect: route.redirect });
+        continue;
+      }
+
+      if (!route.path) throw new Error(`Error: Undefined route path`);
       if (typeof route.path !== "string")
         throw new Error(`Type Error: Required route.path type of: "string"`);
 
-      const href = this.NormalizeRoute(route.href);
       const html = await this.GetHtml(route.path);
       const fragment = await this.CopyChildNodesAsFragment(html);
 
@@ -386,6 +415,7 @@ class App {
 
     for (const [key, value] of pages) {
       const page = value.fragment;
+      if (!page) continue; /* redirect routes have no template */
 
       /* Injection request */
       await this.LoadIncludeCommands(page); /* All at once */
@@ -475,7 +505,7 @@ class App {
       const hashIndex = href.indexOf("#");
       const hash = hashIndex >= 0 ? href.slice(hashIndex + 1) : "";
 
-      await this.LoadRequestedPage(key, root, pages);
+      await this.LoadRequestedPage(key, root, pages, { push: true });
 
       if (hash) {
         const target = document.getElementById(decodeURIComponent(hash));
@@ -575,10 +605,10 @@ class App {
     return fragment;
   }
 
-  static BASE_PATH = (() => {
-    const parts = location.pathname.split("/");
-    return parts.length > 2 && parts[1] ? `/${parts[1]}/` : "/";
-  })();
+  /* The site's base folder = the folder that contains /runtime/App.js.
+     "/" on a normal host, "/repo-name/" on GitHub Pages. It no longer depends on
+     how deep the current page is, so /docs/power-2/cli.html works everywhere. */
+  static BASE_PATH = new URL("../", import.meta.url).pathname;
 
   static ResolveRouteKey(path) {
     let routePath = String(path || "/");
@@ -586,16 +616,22 @@ class App {
 
     if (base !== "/" && routePath.startsWith(base)) {
       routePath = "/" + routePath.slice(base.length);
+    } else if (base !== "/" && routePath === base.slice(0, -1)) {
+      routePath = "/";
     }
 
-    const routeKey = this.NormalizeRoute(routePath);
-    return routeKey === "/index.html" ? "/" : routeKey;
+    /* "/docs/power-2/index.html" and "/docs/power-2/" are the same page */
+    const routeKey = this.NormalizeRoute(routePath).replace(/\/index\.html$/, "");
+    return routeKey || "/";
   }
 
   static BuildLocationPath(key) {
     const routePath = this.NormalizeRoute(key);
     const base = this.BASE_PATH === "/" ? "" : this.BASE_PATH.slice(0, -1);
-    return routePath === "/" ? `${base}/` : `${base}${routePath}`;
+    if (routePath === "/") return `${base}/`;
+    /* Folder-style pages end with "/", file-style pages (x.html) do not. */
+    const isFile = /\.[a-z0-9]+$/i.test(routePath);
+    return `${base}${routePath}${isFile ? "" : "/"}`;
   }
 
   static async FindScriptsAndModuleThem(page) {
@@ -666,9 +702,17 @@ class App {
   }
 
   /* initial page */
-  static async LoadRequestedPage(key, root, pages) {
-    const routeKey = this.ResolveRouteKey(key);
-    const page = pages.get(routeKey) ?? pages.get("/404");
+  static async LoadRequestedPage(key, root, pages, { push = false } = {}) {
+    let routeKey = this.ResolveRouteKey(key);
+    let found = pages.get(routeKey);
+
+    /* Follow redirects (old URL -> new URL). Max 5 hops so a loop cannot hang. */
+    for (let hops = 0; found?.redirect && hops < 5; hops++) {
+      routeKey = this.ResolveRouteKey(found.redirect);
+      found = pages.get(routeKey);
+    }
+
+    const page = found ?? pages.get("/404");
 
     if (!page) {
       console.warn(`No page found for trigger: ${key}`);
@@ -683,7 +727,9 @@ class App {
 
     const targetPath = this.BuildLocationPath(routeKey);
     if (location.pathname !== targetPath) {
-      history.pushState({}, "", targetPath);
+      /* Click = new history entry. First load / Back button / redirect = just fix the address. */
+      if (push) history.pushState({}, "", targetPath);
+      else history.replaceState({}, "", targetPath);
     }
 
     /* Replace all props with actual data */
@@ -694,6 +740,7 @@ class App {
     root.appendChild(fragment);
 
     await this.LoadScriptForThisPage(scripts, root);
+    this.ApplyRouteLinks();
     this.ApplyActiveNavigation(routeKey);
     this.ApplyThemeControl();
     this.ApplyResponsiveNavigation();

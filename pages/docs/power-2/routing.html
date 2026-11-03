@@ -1,0 +1,111 @@
+<include type="css" path="assets/css/site.css"></include>
+<!-- routing.html: page template rendered by POWER Engine App.js -->
+
+<include
+  type="html"
+  path="components/docs-layout.html"
+  crumb="Routing &amp; middleware"
+>
+    <div class="pill">POWER 2.0 · NODE.JS ≥ 22.13</div>
+    <h1>Routing & middleware</h1>
+    <p class="intro">
+      Build endpoints with HTTP methods, named parameters, middleware chains,
+      and route groups.
+    </p>
+    <h2>Define routes</h2>
+    <p>
+      Route definitions live in <code>app/routes/*.js</code>. Handlers can be
+      synchronous or async.
+    </p>
+    <pre><code>export function webRoutes(app) {
+  app.get('/', HomeController.index);
+  app.post('/login', auth.requireGuest, authLimiter, AuthController.login);
+  app.get('/users/:id', async (req, res) => {
+    const user = await User.find(Number(req.params.id));
+    if (!user) return res.status(404).json({ error: 'not found' });
+    res.json(User.serialize(user));
+  });
+}</code></pre>
+    <p>
+      Supported methods include <code>get</code>, <code>post</code>,
+      <code>put</code>, <code>patch</code>, <code>delete</code>,
+      <code>head</code>, <code>options</code>, and <code>all</code>. Named path
+      parameters such as <code>/users/:id</code> are available on
+      <code>req.params</code>.
+    </p>
+    <h2>Middleware</h2>
+    <pre><code>app.use(securityHeaders(config));
+app.use('/admin', requireAdmin);
+app.post('/login', limiter, AuthController.login);</code></pre>
+    <p>
+      Middleware either sends a response, calls <code>next()</code>, or passes
+      an error with <code>next(err)</code>. Order matters: each middleware runs
+      in sequence.
+    </p>
+    <h2>Route groups</h2>
+    <pre><code>app.group('/admin', [auth.requireRole('admin')], (r) => {
+  r.get('/', AdminController.dashboard);
+  r.get('/users', AdminController.usersIndex);
+  r.delete('/users/:id', AdminController.usersDestroy);
+});</code></pre>
+    <h2>Request and response helpers</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>API</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>req.params</code></td>
+            <td>Named route parameters</td>
+          </tr>
+          <tr>
+            <td><code>req.query</code></td>
+            <td>Parsed query string</td>
+          </tr>
+          <tr>
+            <td><code>req.body</code></td>
+            <td>Parsed JSON or URL-encoded body</td>
+          </tr>
+          <tr>
+            <td><code>req.session</code></td>
+            <td>Server-side session methods</td>
+          </tr>
+          <tr>
+            <td><code>res.render(view, data)</code></td>
+            <td>Render a template</td>
+          </tr>
+          <tr>
+            <td><code>res.json(obj)</code></td>
+            <td>Send JSON</td>
+          </tr>
+          <tr>
+            <td><code>res.redirect(path)</code></td>
+            <td>Redirect to a local path</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      Request bodies support JSON and URL-encoded forms. Multipart file uploads
+      are not currently provided by the framework.
+    </div>
+    <div class="callout">
+      <strong>Project status:</strong> P.O.W.E.R. 2.0 is under active
+      development. Verify integrations and follow the security and deployment
+      guidance before production use.
+    </div>
+    <p>
+      Source documentation:
+      <a
+        class="inline"
+        href="https://github.com/OrpanAp/power-2.0/tree/main/docs"
+        target="_blank"
+        rel="noreferrer"
+        >docs/ in the P.O.W.E.R. 2.0 repository ↗</a
+      >
+    </p>
+</include>

@@ -1,0 +1,94 @@
+<include type="css" path="assets/css/site.css"></include>
+<!-- database.html: page template rendered by POWER Engine App.js -->
+
+<include
+  type="html"
+  path="components/docs-layout.html"
+  crumb="Database &amp; models"
+>
+    <div class="pill">POWER 2.0 · NODE.JS ≥ 22.13</div>
+    <h1>Database & models</h1>
+    <p class="intro">
+      Configure database connections, write parameterized queries, define
+      models, and manage schema migrations.
+    </p>
+    <h2>Connection URLs</h2>
+    <p>
+      SQLite is the default for local development. Set <code>DB_URL</code> in
+      your environment file to configure a connection.
+    </p>
+    <pre><code>DB_URL=sqlite:storage/power.sqlite
+# PostgreSQL
+DB_URL=postgres://USER:URL_ENCODED_PASSWORD@127.0.0.1:5432/DATABASE
+# MySQL
+DB_URL=mysql://USER:URL_ENCODED_PASSWORD@127.0.0.1:3306/DATABASE
+# MariaDB
+DB_URL=mariadb://USER:URL_ENCODED_PASSWORD@127.0.0.1:3306/DATABASE</code></pre>
+    <p>
+      URL-encode special characters in credentials, use TLS for remote
+      databases, and run integration tests against the database server you plan
+      to use.
+    </p>
+    <h2>Parameterized queries</h2>
+    <pre><code>import { db } from '../core/database.js';
+
+const rows = await db.all(
+  'SELECT * FROM users WHERE role = ?',
+  ['admin']
+);
+const user = await db.get(
+  'SELECT * FROM users WHERE id = ?',
+  [5]
+);
+await db.run(
+  'UPDATE users SET name = ? WHERE id = ?',
+  ['Ada', 5]
+);</code></pre>
+    <div class="callout">
+      Always bind values with placeholders. Do not concatenate user input into
+      SQL. Table and column names should be validated using the framework's
+      identifier helpers.
+    </div>
+    <h2>Transactions</h2>
+    <pre><code>await db.transaction(async (tx) => {
+  await tx.run('UPDATE accounts SET balance = balance - ? WHERE id = ?', [10, 1]);
+  await tx.run('UPDATE accounts SET balance = balance + ? WHERE id = ?', [10, 2]);
+});</code></pre>
+    <p>
+      Inside the transaction callback, use <code>tx</code> for database
+      operations; mixing in the global connection can wait on the transaction
+      lock.
+    </p>
+    <h2>Migrations</h2>
+    <pre><code>node bin/power-cli.js make:migration create_posts_table
+node bin/power-cli.js db:migrate
+node bin/power-cli.js db:status
+node bin/power-cli.js db:rollback</code></pre>
+    <h2>Models</h2>
+    <pre><code>import { Model } from '../../core/model.js';
+
+export class Post extends Model {
+  static table = 'posts';
+  static fillable = ['title', 'body'];
+}</code></pre>
+    <p>
+      Use the model API to create, find, list, update, and delete records. Test
+      PostgreSQL and MySQL connections against your actual server before
+      production use.
+    </p>
+    <div class="callout">
+      <strong>Project status:</strong> P.O.W.E.R. 2.0 is under active
+      development. Verify integrations and follow the security and deployment
+      guidance before production use.
+    </div>
+    <p>
+      Source documentation:
+      <a
+        class="inline"
+        href="https://github.com/OrpanAp/power-2.0/tree/main/docs"
+        target="_blank"
+        rel="noreferrer"
+        >docs/ in the P.O.W.E.R. 2.0 repository ↗</a
+      >
+    </p>
+</include>

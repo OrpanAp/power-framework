@@ -1,11 +1,11 @@
 <!--
-  Brand (logo + name + tagline). The ONLY place the tagline is written.
+  Brand (logo + name + tagline). The tagline comes from engineName in main.js.
   Props:  href  = where the logo links to
           brand = name shown next to the logo
 -->
-<a class="brand" href="{{ href }}" data-meta-href="/"
+<a class="brand" data-meta-href="/"
   ><span class="mark">ϟ</span
   ><span class="brand-text"
-    >{{ brand }}<small>PROGRESSIVELY OPTIMIZED WEB ENGINE FOR RENDERING</small></span
+    >{{ brand }}<small>{{ engineName }}</small></span
   ></a
 >

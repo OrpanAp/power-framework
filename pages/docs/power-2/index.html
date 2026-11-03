@@ -1,0 +1,141 @@
+<include type="css" path="assets/css/site.css"></include>
+<!-- docs.html: page template rendered by POWER Engine App.js -->
+
+<include
+  type="html"
+  path="components/docs-layout.html"
+  crumb="Build with POWER"
+>
+    <div class="pill">POWER 2.0 · NODE.JS ≥ 22.13</div>
+    <h1>Build with POWER</h1>
+    <p class="intro">
+      Explore the P.O.W.E.R. 2.0 guides: start with setup, then learn routing,
+      data, security, configuration, and deployment.
+    </p>
+    <h2>A framework, clearly explained.</h2>
+    <p>
+      This documentation is based on the current Markdown guides in the
+      P.O.W.E.R. 2.0 repository. Follow the sequence below if you are new, or
+      jump directly to a topic.
+    </p>
+    <div class="cards">
+      <a
+        class="doc-card"
+        data-meta-href="/docs/power-2/quick-start.html"
+        ><b>01 · Quick start →</b
+        ><span
+          >Install, boot the app, sign in, and create your first route.</span
+        ></a
+      ><a
+        class="doc-card"
+        data-meta-href="/docs/power-2/architecture.html"
+        ><b>02 · Architecture →</b
+        ><span
+          >Understand the request lifecycle, folders, and MVC-style
+          layers.</span
+        ></a
+      ><a class="doc-card" data-meta-href="/docs/power-2/routing.html"
+        ><b>03 · Routing & middleware →</b
+        ><span
+          >Define endpoints, parameters, middleware, and route groups.</span
+        ></a
+      ><a class="doc-card" data-meta-href="/docs/power-2/database.html"
+        ><b>04 · Database & models →</b
+        ><span
+          >Configure SQLite and SQL connection URLs, query safely, and
+          migrate.</span
+        ></a
+      ><a class="doc-card" data-meta-href="/docs/power-2/security.html"
+        ><b>05 · Security & auth →</b
+        ><span
+          >Sessions, roles, CSRF, password policy, and optional TOTP.</span
+        ></a
+      ><a class="doc-card" data-meta-href="/docs/power-2/cli.html"
+        ><b>06 · CLI reference →</b
+        ><span
+          >Discover generators, database commands, and environment
+          helpers.</span
+        ></a
+      ><a
+        class="doc-card"
+        data-meta-href="/docs/power-2/configuration.html"
+        ><b>07 · Configuration →</b
+        ><span
+          >Learn environment files, settings, validation, and secret
+          handling.</span
+        ></a
+      ><a
+        class="doc-card"
+        data-meta-href="/docs/power-2/deployment.html"
+        ><b>08 · Deployment →</b
+        ><span
+          >Prepare production settings, TLS, reverse proxies, and scaling.</span
+        ></a
+      >
+    </div>
+    <h2>What is P.O.W.E.R.?</h2>
+    <p>
+      P.O.W.E.R. (Progressively Optimized Web Engine for Rendering) is a Node.js
+      web framework built around Node.js built-ins, with server-rendered views,
+      routing, middleware, authentication, database tools, a developer CLI, and
+      live Markdown presentations.
+    </p>
+    <div class="callout">
+      Requirements: Node.js 22.13.0 or newer. The project currently has zero
+      declared runtime dependencies. Zero dependencies does not automatically
+      guarantee security or production readiness.
+    </div>
+    <h2>Recommended path</h2>
+    <ol>
+      <li>
+        Run the
+        <a
+          class="inline"
+          data-meta-href="/docs/power-2/quick-start.html"
+          >quick start</a
+        >
+        and check the startup output.
+      </li>
+      <li>
+        Read
+        <a
+          class="inline"
+          data-meta-href="/docs/power-2/architecture.html"
+          >project structure</a
+        >
+        before editing framework internals.
+      </li>
+      <li>
+        Build one endpoint using
+        <a class="inline" data-meta-href="/docs/power-2/routing.html"
+          >routing</a
+        >
+        and a controller/view.
+      </li>
+      <li>Configure the database and validate environment values.</li>
+      <li>
+        Use the
+        <a
+          class="inline"
+          data-meta-href="/docs/power-2/deployment.html"
+          >deployment checklist</a
+        >
+        before exposing an app publicly.
+      </li>
+    </ol>
+    <div class="callout">
+      <strong>Project status:</strong> P.O.W.E.R. 2.0 is under active
+      development. Verify integrations and follow the security and deployment
+      guidance before production use.
+    </div>
+    <p>
+      Source documentation:
+      <a
+        class="inline"
+        href="https://github.com/OrpanAp/power-2.0/tree/main/docs"
+        target="_blank"
+        rel="noreferrer"
+        >docs/ in the P.O.W.E.R. 2.0 repository ↗</a
+      >
+    </p>
+</include>

@@ -1,0 +1,102 @@
+<include type="css" path="assets/css/site.css"></include>
+<!-- configuration.html: page template rendered by POWER Engine App.js -->
+
+<include
+  type="html"
+  path="components/docs-layout.html"
+  crumb="Configuration &amp; environment"
+>
+    <div class="pill">POWER 2.0 · NODE.JS ≥ 22.13</div>
+    <h1>Configuration & environment</h1>
+    <p class="intro">
+      Configure application settings through layered environment files, validate
+      values, and keep production secrets out of source control.
+    </p>
+    <h2>Environment file precedence</h2>
+    <p>
+      Lower-priority sources are loaded first; the real process environment
+      takes precedence over files.
+    </p>
+    <ol>
+      <li><code>.env</code></li>
+      <li>
+        <code>.env.&lt;mode&gt;</code>, such as <code>.env.production</code>
+      </li>
+      <li><code>.env.local</code> (skipped in test mode)</li>
+      <li><code>.env.&lt;mode&gt;.local</code></li>
+    </ol>
+    <h2>Core settings</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Default / purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>NODE_ENV</code></td>
+            <td>Development mode by default.</td>
+          </tr>
+          <tr>
+            <td><code>HOST / PORT</code></td>
+            <td>127.0.0.1 / 3000</td>
+          </tr>
+          <tr>
+            <td><code>SESSION_SECRET</code></td>
+            <td>32+ characters; required in production.</td>
+          </tr>
+          <tr>
+            <td><code>DB_URL</code></td>
+            <td>SQLite local database by default.</td>
+          </tr>
+          <tr>
+            <td><code>ALLOWED_HOSTS</code></td>
+            <td>Optional comma-separated allowed hostnames.</td>
+          </tr>
+          <tr>
+            <td><code>FORCE_HTTPS</code></td>
+            <td>Enable HTTP-to-HTTPS redirects.</td>
+          </tr>
+          <tr>
+            <td><code>TRUST_PROXY</code></td>
+            <td>Trust forwarded headers only behind your own proxy.</td>
+          </tr>
+          <tr>
+            <td><code>REQUIRE_ADMIN_2FA</code></td>
+            <td>Require administrator two-factor enrolment.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h2>Validate configuration</h2>
+    <pre><code>node bin/power-cli.js env:check
+node bin/power-cli.js env:check --env=production
+node bin/power-cli.js env:example
+node bin/power-cli.js key:generate --write</code></pre>
+    <h2>Secret files</h2>
+    <p>
+      For container secret mounts, settings can use a
+      <code>_FILE</code> variant, for example
+      <code>SESSION_SECRET_FILE=/run/secrets/session_secret</code>. Never commit
+      <code>.env</code>, <code>.env.local</code>, or files containing real
+      credentials. Rotating the session secret invalidates existing sessions and
+      affects encrypted two-factor secrets.
+    </p>
+    <div class="callout">
+      <strong>Project status:</strong> P.O.W.E.R. 2.0 is under active
+      development. Verify integrations and follow the security and deployment
+      guidance before production use.
+    </div>
+    <p>
+      Source documentation:
+      <a
+        class="inline"
+        href="https://github.com/OrpanAp/power-2.0/tree/main/docs"
+        target="_blank"
+        rel="noreferrer"
+        >docs/ in the P.O.W.E.R. 2.0 repository ↗</a
+      >
+    </p>
+</include>

@@ -1,0 +1,88 @@
+<include type="css" path="assets/css/site.css"></include>
+<!-- cli.html: page template rendered by POWER Engine App.js -->
+
+<include
+  type="html"
+  path="components/docs-layout.html"
+  crumb="CLI reference"
+>
+    <div class="pill">POWER 2.0 · NODE.JS ≥ 22.13</div>
+    <h1>CLI reference</h1>
+    <p class="intro">
+      Use the built-in command line to serve the app, generate code, inspect
+      environment settings, and manage database migrations.
+    </p>
+    <h2>Command format</h2>
+    <pre><code>node bin/power-cli.js help
+node bin/power-cli.js serve</code></pre>
+    <h2>Project and server</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>init [dir]</code></td>
+            <td>Scaffold a project and create environment defaults.</td>
+          </tr>
+          <tr>
+            <td><code>serve [--port=3000]</code></td>
+            <td>Start the development server.</td>
+          </tr>
+          <tr>
+            <td><code>make:controller Name</code></td>
+            <td>Generate a controller.</td>
+          </tr>
+          <tr>
+            <td><code>make:model Name -m</code></td>
+            <td>Generate a model and migration.</td>
+          </tr>
+          <tr>
+            <td><code>make:migration name</code></td>
+            <td>Create a timestamped migration.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h2>Database commands</h2>
+    <pre><code>node bin/power-cli.js db:migrate
+node bin/power-cli.js db:rollback
+node bin/power-cli.js db:status
+node bin/power-cli.js db:seed
+node bin/power-cli.js db:check</code></pre>
+    <h2>Environment and secrets</h2>
+    <pre><code>node bin/power-cli.js env:check
+node bin/power-cli.js env:check --env=production
+node bin/power-cli.js env:get APP_NAME
+node bin/power-cli.js env:set APP_NAME="My App"
+node bin/power-cli.js env:example
+node bin/power-cli.js key:generate --write</code></pre>
+    <h2>Account utilities</h2>
+    <pre><code>node bin/power-cli.js admin:info
+node bin/power-cli.js user:reset-password
+node bin/power-cli.js user:disable-2fa user@example.com</code></pre>
+    <p>
+      Use <code>node bin/power-cli.js help</code> as the source of truth for the
+      checked-out version. Run <code>npm test</code> to execute the automated
+      test suite.
+    </p>
+    <div class="callout">
+      <strong>Project status:</strong> P.O.W.E.R. 2.0 is under active
+      development. Verify integrations and follow the security and deployment
+      guidance before production use.
+    </div>
+    <p>
+      Source documentation:
+      <a
+        class="inline"
+        href="https://github.com/OrpanAp/power-2.0/tree/main/docs"
+        target="_blank"
+        rel="noreferrer"
+        >docs/ in the P.O.W.E.R. 2.0 repository ↗</a
+      >
+    </p>
+</include>

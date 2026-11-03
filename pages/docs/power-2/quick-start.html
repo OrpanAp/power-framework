@@ -1,0 +1,119 @@
+<include type="css" path="assets/css/site.css"></include>
+<!-- quick-start.html: page template rendered by POWER Engine App.js -->
+
+<include
+  type="html"
+  path="components/docs-layout.html"
+  crumb="Quick start"
+>
+    <div class="pill">POWER 2.0 · NODE.JS ≥ 22.13</div>
+    <h1>Quick start</h1>
+    <p class="intro">
+      Get P.O.W.E.R. 2.0 running locally, configure the environment, and make
+      your first server-rendered page.
+    </p>
+    <h2>01 · Requirements</h2>
+    <ul>
+      <li>
+        Node.js <strong>22.13.0 or newer</strong> (the framework uses built-in
+        SQLite).
+      </li>
+      <li>
+        Git, or download the source ZIP from the
+        <a
+          class="inline"
+          href="https://github.com/OrpanAp/power-2.0/archive/refs/heads/main.zip"
+          >repository archive</a
+        >.
+      </li>
+      <li>
+        A terminal: PowerShell, Command Prompt, macOS/Linux terminal, or Git
+        Bash.
+      </li>
+    </ul>
+    <h2>02 · Download the source</h2>
+    <pre><code>git clone https://github.com/OrpanAp/power-2.0.git
+cd power-2.0</code></pre>
+    <h2>03 · Create your environment file</h2>
+    <p>PowerShell:</p>
+    <pre><code>Copy-Item .env.example .env</code></pre>
+    <p>macOS, Linux, or Git Bash:</p>
+    <pre><code>cp .env.example .env</code></pre>
+    <p>
+      The example configuration uses a local SQLite database, so you can explore
+      without installing a separate database server first.
+    </p>
+    <h2>04 · Start the server</h2>
+    <pre><code>node bin/power-cli.js serve</code></pre>
+    <p>
+      Open <code>http://127.0.0.1:3000</code>. On first boot, the app may create
+      the initial administrator account and print a generated password. Keep it
+      private and change it after signing in.
+    </p>
+    <h2>05 · Explore the app</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>/</code></td>
+            <td>Application landing page</td>
+          </tr>
+          <tr>
+            <td><code>/docs</code></td>
+            <td>Framework documentation</td>
+          </tr>
+          <tr>
+            <td><code>/demo</code></td>
+            <td>Interactive feature examples</td>
+          </tr>
+          <tr>
+            <td><code>/admin</code></td>
+            <td>Administrator dashboard</td>
+          </tr>
+          <tr>
+            <td><code>/presentations</code></td>
+            <td>Public presentation decks</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h2>06 · Create a controller</h2>
+    <pre><code>node bin/power-cli.js make:controller Hello</code></pre>
+    <p>
+      Then create a view under <code>app/views/</code> and register the route in
+      <code>app/routes/web.js</code>. For the full request pattern, continue to
+      <a class="inline" data-meta-href="/docs/power-2/routing.html"
+        >Routing & middleware</a
+      >.
+    </p>
+    <h2>Run tests</h2>
+    <pre><code>npm test</code></pre>
+    <p>
+      See the
+      <a class="inline" data-meta-href="/docs/power-2/cli.html"
+        >CLI reference</a
+      >
+      for all supported commands.
+    </p>
+    <div class="callout">
+      <strong>Project status:</strong> P.O.W.E.R. 2.0 is under active
+      development. Verify integrations and follow the security and deployment
+      guidance before production use.
+    </div>
+    <p>
+      Source documentation:
+      <a
+        class="inline"
+        href="https://github.com/OrpanAp/power-2.0/tree/main/docs"
+        target="_blank"
+        rel="noreferrer"
+        >docs/ in the P.O.W.E.R. 2.0 repository ↗</a
+      >
+    </p>
+</include>

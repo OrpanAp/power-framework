@@ -1,0 +1,77 @@
+<include type="css" path="assets/css/site.css"></include>
+<!-- deployment.html: page template rendered by POWER Engine App.js -->
+
+<include
+  type="html"
+  path="components/docs-layout.html"
+  crumb="Deployment"
+>
+    <div class="pill">POWER 2.0 · NODE.JS ≥ 22.13</div>
+    <h1>Deployment</h1>
+    <p class="intro">
+      Prepare a P.O.W.E.R. app for production with safe environment settings,
+      HTTPS, database backups, and an honest understanding of scaling limits.
+    </p>
+    <h2>Production baseline</h2>
+    <pre><code>NODE_ENV=production
+SESSION_SECRET=use-a-long-random-secret
+ALLOWED_HOSTS=example.com
+POWER_ADMIN_EMAIL=you@example.com
+POWER_ADMIN_PASSWORD=use-a-unique-password</code></pre>
+    <p>
+      Set secrets in your host's secret manager or protected environment, not in
+      committed source. Validate the final configuration before starting.
+    </p>
+    <pre><code>node bin/power-cli.js env:check --env=production
+node --disable-warning=ExperimentalWarning app.js</code></pre>
+    <h2>Production checklist</h2>
+    <ul>
+      <li>Use HTTPS and secure cookie settings.</li>
+      <li>
+        Set a strong <code>SESSION_SECRET</code> and restrict
+        <code>ALLOWED_HOSTS</code>.
+      </li>
+      <li>Use unique administrator credentials and protect access.</li>
+      <li>Configure database TLS and backups; test restore procedures.</li>
+      <li>Run <code>npm test</code> and database integration tests.</li>
+      <li>Monitor logs, errors, resource use, and security updates.</li>
+      <li>Keep secrets and local database files out of Git.</li>
+    </ul>
+    <h2>Reverse proxy and live streams</h2>
+    <p>
+      When running behind your own trusted proxy, configure
+      <code>TRUST_PROXY=1</code> and the allowed hosts. Live presentation and
+      reload streams use Server-Sent Events; proxy buffering should be disabled
+      for those routes.
+    </p>
+    <h2>Scaling limits to plan around</h2>
+    <div class="callout">
+      Rate limiters, live presentation rooms, and development live reload are
+      in-memory and per-process. Sessions are database-backed. Multi-process
+      deployments need sticky routing for live/presenter paths or a shared
+      pub/sub replacement, plus a shared rate-limiting strategy. Live reload is
+      a development feature.
+    </div>
+    <h2>Database and uploads</h2>
+    <p>
+      SQLite can fit a single-server deployment when storage is persistent and
+      backups are reliable. PostgreSQL or MySQL may be better for managed or
+      multi-server deployments, but verify the integration against your server.
+      Multipart file uploads are not currently provided by the framework.
+    </p>
+    <div class="callout">
+      <strong>Project status:</strong> P.O.W.E.R. 2.0 is under active
+      development. Verify integrations and follow the security and deployment
+      guidance before production use.
+    </div>
+    <p>
+      Source documentation:
+      <a
+        class="inline"
+        href="https://github.com/OrpanAp/power-2.0/tree/main/docs"
+        target="_blank"
+        rel="noreferrer"
+        >docs/ in the P.O.W.E.R. 2.0 repository ↗</a
+      >
+    </p>
+</include>
