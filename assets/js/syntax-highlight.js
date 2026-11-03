@@ -48,27 +48,71 @@
       .join("\n");
   }
 
+  /* Markup (HTML) is highlighted in ONE left-to-right pass.
+     Every piece of the original text is cut out once, escaped once and wrapped
+     once. (An older version ran several find-and-replace passes over its own
+     output, so later passes matched inside the <span class="..."> it had just
+     written and produced garbage like  <syn-attr">class="syn-tag">.) */
+
+  /* An HTML comment, or a tag. Quoted attribute values may contain ">" safely. */
+  const markupToken =
+    /<!--[\s\S]*?-->|<\/?[A-Za-z](?:[^<>"']|"[^"]*"|'[^']*')*>/g;
+
+  /* name, or name="value" / name='value' / name=value */
+  const attributePattern =
+    /([^\s=\/"'<>]+)(?:(\s*=\s*)("[^"]*"|'[^']*'|[^\s"'<>]+))?/g;
+
+  function highlightTag(tag) {
+    const parts = tag.match(/^(<\/?)([A-Za-z][\w:-]*)([\s\S]*?)(\/?>)$/);
+    if (!parts) return escapeHTML(tag);
+
+    const [, open, name, rest, close] = parts;
+    let html = escapeHTML(open) + wrap("tag", name);
+    let last = 0;
+
+    for (const attr of rest.matchAll(attributePattern)) {
+      html += escapeHTML(rest.slice(last, attr.index));
+      html += wrap("attr", attr[1]);
+      if (attr[2] !== undefined) {
+        html += escapeHTML(attr[2]) + wrap("string", attr[3]);
+      }
+      last = attr.index + attr[0].length;
+    }
+
+    return html + escapeHTML(rest.slice(last)) + escapeHTML(close);
+  }
+
+  /* Plain text between tags. Lines that start with // are comments. */
+  function highlightMarkupText(text, startsAtLineStart) {
+    return text
+      .split("\n")
+      .map((line, index) =>
+        (index > 0 || startsAtLineStart) && /^\s*\/\//.test(line)
+          ? wrap("comment", line)
+          : escapeHTML(line),
+      )
+      .join("\n");
+  }
+
   function highlightMarkup(raw) {
-    return raw
-      .split(/(<\/?[A-Za-z][^<>]*?>)/g)
-      .map((part) => {
-        if (!/^<\/?[A-Za-z]/.test(part)) return escapeHTML(part);
-        let tag = escapeHTML(part);
-        tag = tag.replace(
-          /^(&lt;\/?)([A-Za-z][\w:-]*)/,
-          (_, open, name) => open + wrap("tag", name),
-        );
-        tag = tag.replace(
-          /\s([\w:-]+)(=)/g,
-          (_, name, equals) => " " + wrap("attr", name) + equals,
-        );
-        tag = tag.replace(
-          /=(["'])(.*?)\1/g,
-          (_, quote, value) => "=" + quote + wrap("string", value) + quote,
-        );
-        return tag;
-      })
-      .join("");
+    let html = "";
+    let last = 0;
+
+    for (const match of raw.matchAll(markupToken)) {
+      const before = raw.slice(last, match.index);
+      html += highlightMarkupText(
+        before,
+        last === 0 || raw[last - 1] === "\n",
+      );
+      html += match[0].startsWith("<!--")
+        ? wrap("comment", match[0])
+        : highlightTag(match[0]);
+      last = match.index + match[0].length;
+    }
+
+    return (
+      html + highlightMarkupText(raw.slice(last), last === 0 || raw[last - 1] === "\n")
+    );
   }
 
   function highlightCode(raw) {
@@ -115,6 +159,12 @@
     if (looksLikeShell) html = highlightShell(raw);
     else if (looksLikeMarkup) html = highlightMarkup(raw);
     else html = highlightCode(raw);
+
+    /* Safety net: colours must never change the TEXT. If they did (a bug in a
+       highlighter), show the plain code instead of garbled code. */
+    const probe = document.createElement("div");
+    probe.innerHTML = html;
+    if (probe.textContent !== raw) html = escapeHTML(raw);
 
     pre.innerHTML = html;
     pre.classList.add("syntax-block");
